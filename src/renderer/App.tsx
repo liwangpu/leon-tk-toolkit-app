@@ -38,12 +38,12 @@ const routes: Array<IMenu> = [
     icon: (<IdcardOutlined />),
     activedIcon: (<IdcardFilled />)
   },
-  {
-    title: '测试',
-    url: '/app/test',
-    icon: (<ExperimentOutlined />),
-    activedIcon: (<ExperimentFilled />)
-  }
+  // {
+  //   title: '测试',
+  //   url: '/app/test',
+  //   icon: (<ExperimentOutlined />),
+  //   activedIcon: (<ExperimentFilled />)
+  // }
 ];
 
 const App = () => {

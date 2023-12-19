@@ -1,6 +1,6 @@
 {
   "name": "leon-tk-toolkit-app",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "A foundation for scalable desktop apps",
   "main": "./src/main/main.ts",
   "scripts": {
@@ -12,13 +12,12 @@
     "upgradeVerion": "gulp updateAppVersion",
     "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
     "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never && npm run build:dll",
-    "release": "ts-node ./.erb/scripts/clean.js dist && npm run build && npm run upgradeVerion && cross-env GH_TOKEN='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' electron-builder --publish always && npm run build:dll",
+    "release": "ts-node ./.erb/scripts/clean.js dist && npm run build && npm run upgradeVerion && electron-builder --publish always && npm run build:dll",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
     "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
     "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.preload.dev.ts",
-    "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
-    "test": "jest"
+    "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts"
   },
   "dependencies": {
     "antd": "^5.6.1",
@@ -87,8 +86,6 @@
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.3",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
     "mini-css-extract-plugin": "^2.7.6",
     "prettier": "^3.0.3",
     "react-refresh": "^0.14.0",
@@ -139,7 +136,6 @@
       "owner": "liwangpu",
       "repo": "leon-tk-toolkit-app",
       "private": false,
-      "token": "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",
       "channel": "latest",
       "releaseType": "release"
     }
@@ -158,38 +154,6 @@
         }
       }
     ]
-  },
-  "jest": {
-    "moduleDirectories": [
-      "node_modules",
-      "release/app/node_modules",
-      "src"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "ts",
-      "tsx",
-      "json"
-    ],
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/.erb/mocks/fileMock.js",
-      "\\.(css|less|sass|scss)$": "identity-obj-proxy"
-    },
-    "setupFiles": [
-      "./.erb/scripts/check-build-exists.ts"
-    ],
-    "testEnvironment": "jsdom",
-    "testEnvironmentOptions": {
-      "url": "http://localhost/"
-    },
-    "testPathIgnorePatterns": [
-      "release/app/dist",
-      ".erb/dll"
-    ],
-    "transform": {
-      "\\.(ts|tsx|js|jsx)$": "ts-jest"
-    }
   },
   "keywords": [],
   "homepage": "https://github.com/liwangpu/leon-tk-toolkit-app#readme",

@@ -1,0 +1,20 @@
+{
+  "name": "leon-tk-toolkit-app",
+  "version": "0.0.2",
+  "description": "toolkit",
+  "license": "MIT",
+  "author": {
+    "name": "TK小工具",
+    "email": "liwang.pu@gmail.com",
+    "url": "https://github.com/liwangpu/leon-tk-toolkit-app"
+  },
+  "main": "./dist/main/main.js",
+  "scripts": {
+    "rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
+    "postinstall": "npm run rebuild && npm run link-modules",
+    "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
+  },
+  "dependencies": {
+    "install": "^0.13.0"
+  }
+}

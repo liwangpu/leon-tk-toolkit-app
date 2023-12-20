@@ -1,9 +1,14 @@
-(() => {
-
-  const MESSAGE_TOPIC_GOTO_LOGIN = 'tkGotoLogin';
+export default function startup() {
+  console.log(`----------------------------------------------------`);
+  console.log(`tiktok script work!`);
+  console.log(`----------------------------------------------------`);
+  const MESSAGE_TOPIC_GOTO_LOGIN = "tkGotoLogin";
 
   const subscribeMessage = (topic, cb) => {
-    window.electron.ipcRenderer.on(topic, cb);
+    window.electron.ipcRenderer.on(topic, data => {
+      console.log(`receive message:`, topic, data);
+      cb(data);
+    });
   };
 
   const UIDomManager = (() => {
@@ -11,7 +16,7 @@
     return {
       async getLoginButton() {
         if (!__loginButtonDom) {
-          const loginButtonId = 'header-login-button';
+          const loginButtonId = "header-login-button";
           __loginButtonDom = document.getElementById(loginButtonId);
         }
 
@@ -24,17 +29,12 @@
 
     return {
       async login(account) {
-        console.log(`login account:`, account);
-        const loginBtn =await UIDomManager.getLoginButton();
-        console.log(`loginBtn:`,loginBtn);
+        const loginBtn = await UIDomManager.getLoginButton();
         loginBtn.click();
-
       }
     };
   })();
 
   // 订阅:去登录
   subscribeMessage(MESSAGE_TOPIC_GOTO_LOGIN, AccountManager.login);
-
-})();
-
+}

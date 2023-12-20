@@ -1,7 +1,5 @@
-import fs from 'fs';
-import path from 'node:path';
+import script from "./tiktok";
 
-export function getExternalScript(fileName: string) {
-  const filePath = path.join(__dirname, fileName);
-  return fs.readFileSync(filePath, { encoding: 'utf-8' });
+export function getTiktokScript() {
+  return `${script.toString()};${script.name}();`;
 }

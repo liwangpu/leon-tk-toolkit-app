@@ -27,7 +27,7 @@ if (window.electron) {
 
 const routes: Array<IMenu> = [
   {
-    title: '系统设置',
+    title: '环境设置',
     url: '/app/env-setting',
     icon: (<SettingOutlined />),
     activedIcon: (<SettingFilled />)

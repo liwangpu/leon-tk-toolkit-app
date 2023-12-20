@@ -1,6 +1,6 @@
 {
   "name": "leon-tk-toolkit-app",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A foundation for scalable desktop apps",
   "main": "./src/main/main.ts",
   "scripts": {

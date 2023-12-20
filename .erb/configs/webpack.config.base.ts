@@ -6,10 +6,7 @@ import webpack from 'webpack';
 import TsconfigPathsPlugins from 'tsconfig-paths-webpack-plugin';
 import webpackPaths from './webpack.paths';
 import { dependencies as externals } from '../../release/app/package.json';
-import path from 'path';
 
-console.log('------------------------------------------');
-console.log(path.join(webpackPaths.srcMainPath, 'externalScripts'));
 const configuration: webpack.Configuration = {
   externals: [...Object.keys(externals || {})],
 
@@ -17,16 +14,6 @@ const configuration: webpack.Configuration = {
 
   module: {
     rules: [
-      {
-        test: /\.ts$/i,
-        include: [
-          path.join(webpackPaths.srcMainPath, 'externalScripts')
-        ],
-        use: [
-          'raw-loader',
-          'ts-loader'
-        ]
-      },
       {
         test: /\.[jt]sx?$/,
         exclude: /node_modules/,

@@ -22,6 +22,7 @@
   "dependencies": {
     "antd": "^5.6.1",
     "axios": "^1.4.0",
+    "rc-tween-one": "^3.0.6",
     "@ladjs/country-language": "1.0.3",
     "electron-store": "^8.1.0",
     "classnames": "^2.3.2",
@@ -39,7 +40,8 @@
     "mobx-react-lite": "^3.4.3",
     "mobx-state-tree": "^5.1.8",
     "mst-middlewares": "^5.1.8",
-    "shortid": "^2.2.16"
+    "shortid": "^2.2.16",
+    "escape-string-regexp": "^5.0.0"
   },
   "devDependencies": {
     "gulp": "4.0.2",

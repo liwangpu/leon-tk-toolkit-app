@@ -13,6 +13,8 @@ import { useMessageCenter, useNotify } from "../../hooks";
 
 const appStore = getAppStore();
 
+console.log(`appStore:`,appStore);
+
 const AccountManager: React.FC = observer(() => {
 
   const { tiktokStore } = appStore;
@@ -94,6 +96,10 @@ const AccountManager: React.FC = observer(() => {
     messageCenter.gotoLogin(toJS(currentAccount));
   };
 
+  const handleRegister = () => {
+    messageCenter.gotoRegister(toJS(currentAccount));
+  };
+
   return (
     <Page
       header={(
@@ -157,6 +163,7 @@ const AccountManager: React.FC = observer(() => {
               onLaunch={() => tiktokStore.launchAccounts([currentId])}
               onShutDown={() => tiktokStore.shutDownAccounts([currentId])}
               onLogin={handleLogin}
+              onRegister={handleRegister}
             />
           }
         </Drawer>

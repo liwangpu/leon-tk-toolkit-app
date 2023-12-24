@@ -1,11 +1,13 @@
-import { IMessage } from '../../interfaces';
-import { MessageTopic } from '../../enums';
-import { OpenHtmlFileHandler } from './openHtmlFileHandler';
-import { TkOpenWindowHandler } from './tkOpenWindowHandler';
-import { BrowserWindow } from 'electron';
-import { TkGotoLoginHandler } from './tkGotoLoginHandler';
-import { TkCloseWindowHandler } from './tkCloseWindowHandler';
-import { TkSettingEnvWindowHandler } from './tkSettingEnvHandler';
+import { IMessage } from "../../interfaces";
+import { MessageTopic } from "../../enums";
+import { OpenHtmlFileHandler } from "./openHtmlFileHandler";
+import { TkOpenWindowHandler } from "./tkOpenWindowHandler";
+import { BrowserWindow } from "electron";
+import { TkGotoLoginHandler } from "./tkGotoLoginHandler";
+import { TkCloseWindowHandler } from "./tkCloseWindowHandler";
+import { TkSettingEnvWindowHandler } from "./tkSettingEnvHandler";
+import { TkDomReadyHandler } from "./tkDomReadyHandler";
+import { TkGotoRegisterHandler } from "./tkGotoRegisterHandler";
 
 export interface IMessageParam {
   event: any;
@@ -15,6 +17,7 @@ export interface IMessageParam {
 
 export interface IMessageHandlerContext {
   mainWindow: BrowserWindow;
+  handler: (params: IMessageParam) => any;
 }
 
 export interface IMessageHandler {
@@ -24,7 +27,6 @@ export interface IMessageHandler {
 export interface MessageHandlerConstructor {
   new(context: IMessageHandlerContext): IMessageHandler;
 }
-
 
 function getActionHandler(topic: MessageTopic): MessageHandlerConstructor | null {
   switch (topic) {
@@ -38,6 +40,10 @@ function getActionHandler(topic: MessageTopic): MessageHandlerConstructor | null
       return TkCloseWindowHandler;
     case MessageTopic.tkGotoLogin:
       return TkGotoLoginHandler;
+    case MessageTopic.tkGotoRegister:
+      return TkGotoRegisterHandler;
+    case MessageTopic.tkDomReady:
+      return TkDomReadyHandler;
     default:
       return null;
   }
@@ -45,18 +51,18 @@ function getActionHandler(topic: MessageTopic): MessageHandlerConstructor | null
 
 export async function handleMessage(params: IMessageParam & IMessageHandlerContext) {
   const { mainWindow, event, topic, data } = params;
-  const Handler = getActionHandler(topic as any);
-  // console.log(`params:`, params);
-  // console.log(`Handler:`, Handler);
-  // console.log(`----------------------------------`,);
-  // console.log(`topic:`,topic,typeof Handler);
-  if (Handler) {
-    const handler = new Handler({ mainWindow });
-    return handler.handle({ event, topic, data });
-  }
 
+  const handler = (props: IMessageParam) => {
+    const Handler = getActionHandler(props.topic as any);
+    if (Handler) {
+      const h = new Handler({ mainWindow, handler });
+      return h.handle(props);
+    }
+  };
+
+  return handler({ event, topic, data });
 }
 
 export function getTKPartitionKey(account: string) {
-  return `persist:tiktok@${account}`;
+  return `persist:tiktok_1@${account}`;
 }

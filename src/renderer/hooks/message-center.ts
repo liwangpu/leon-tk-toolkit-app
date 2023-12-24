@@ -23,6 +23,9 @@ export function useMessageCenter() {
     },
     gotoLogin(params: { account: string, password: string }) {
       sendMessage({ topic: MessageTopic.tkGotoLogin, data: params });
+    },
+    gotoRegister(params: { account: string, password: string }){
+      sendMessage({ topic: MessageTopic.tkGotoRegister, data: params });
     }
   };
 }

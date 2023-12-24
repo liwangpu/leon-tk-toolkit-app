@@ -1,5 +1,5 @@
-import { memo } from 'react';
 import { Select } from 'antd';
+import { memo } from 'react';
 import { LANGUAGE_CODES } from '../../../consts';
 import { translateLanguageCodeToDisplayName } from '../../utils';
 

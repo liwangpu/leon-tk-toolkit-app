@@ -4,5 +4,7 @@ export enum MessageTopic {
   tkOpenWindow = 'tkOpenWindow',
   tkCloseWindow = 'tkCloseWindow',
   tkGotoLogin = 'tkGotoLogin',
+  tkGotoRegister = 'tkGotoRegister',
   afterTKCloseWindow = 'afterTKCloseWindow',
+  tkDomReady = 'tkDomReady',
 }

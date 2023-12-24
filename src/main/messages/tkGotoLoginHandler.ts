@@ -10,10 +10,7 @@ export class TkGotoLoginHandler implements IMessageHandler {
   handle({ event, data }: IMessageParam & { data: { account: string, password: string } }): any {
     const windowKey = getTKPartitionKey(data.account);
     const win = windowManager.getWindow(windowKey);
-    if (!win) {
-      return;
-    }
-
+    if (!win) return;
     win.webContents.send(MessageTopic.tkGotoLogin, data);
   }
 

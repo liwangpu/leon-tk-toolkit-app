@@ -4,7 +4,7 @@ import {
   IdcardFilled,
   IdcardOutlined,
   SettingFilled,
-  SettingOutlined
+  SettingOutlined,
 } from '@ant-design/icons';
 import { Outlet } from 'react-router-dom';
 import { AppSidebar, IMenu } from 'leon-rc-toolkit';
@@ -18,38 +18,41 @@ import type { IEnvSetting, ITKAccount } from '../interfaces';
 import { MessageTopic } from '../enums';
 
 const appStore = getAppStore();
+appStore.envStore.loadEnv();
 
 if (window.electron) {
-  window.electron.ipcRenderer.on(MessageTopic.afterTKCloseWindow, (account: ITKAccount) => {
-    appStore.tiktokStore.shutDownAccounts([account.id]);
-  });
+  window.electron.ipcRenderer.on(
+    MessageTopic.afterTKCloseWindow,
+    (account: ITKAccount) => {
+      appStore.tiktokStore.shutDownAccounts([account.id]);
+    },
+  );
 }
 
 const routes: Array<IMenu> = [
   {
-    title: '环境设置',
-    url: '/app/env-setting',
-    icon: (<SettingOutlined />),
-    activedIcon: (<SettingFilled />)
-  },
-  {
     title: '账号管理',
     url: '/app/account-manager',
-    icon: (<IdcardOutlined />),
-    activedIcon: (<IdcardFilled />)
+    icon: <IdcardOutlined />,
+    activedIcon: <IdcardFilled />,
+  },
+  {
+    title: '环境设置',
+    url: '/app/env-setting',
+    icon: <SettingOutlined />,
+    activedIcon: <SettingFilled />,
   },
   // {
   //   title: '测试',
   //   url: '/app/test',
-  //   icon: (<ExperimentOutlined />),
-  //   activedIcon: (<ExperimentFilled />)
-  // }
+  //   icon: <ExperimentOutlined />,
+  //   activedIcon: <ExperimentFilled />,
+  // },
 ];
 
 const App = () => {
   const message = useMessageCenter();
   useEffect(() => {
-
     addMiddleware(appStore.tiktokStore, (call, next) => {
       if (call.type === 'action' && call.name === 'toggleOnLine') {
         const onLine: boolean = call.args[0];
@@ -71,9 +74,7 @@ const App = () => {
       next(call);
     });
 
-    return () => {
-
-    };
+    return () => {};
   }, []);
 
   return (

@@ -7,18 +7,29 @@
     content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0'>
   <meta http-equiv='X-UA-Compatible' content='ie=edge'>
   <title>Document</title>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
   <script>
     window.onload = function () {
-      const lang = navigator.language;
-      const txtLang = document.getElementById('txtLang');
-      txtLang.innerHTML=lang;
+      // const lang = navigator.language;
+      // const txtLang = document.getElementById('txtLang');
+      // txtLang.innerHTML=lang;
+
+      const input = document.getElementById('ipt-password');
+      // input.value = '1235';
+      input.setAttribute('value', '1234');
+      // const ipt = document.querySelector('div.box>input');
+      // ipt.value = '1235';
+      // console.log('ipt:', ipt);
     }
   </script>
 </head>
 
 <body>
-  <h1>Lang: <span id="txtLang"></span></h1>
+  <!-- <h1>Lang: <span id="txtLang"></span></h1> -->
+  <div class="box">
+    <input type="password" name="password" id="ipt-password">
+  </div>
+
 </body>
 
 </html>

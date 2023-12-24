@@ -28,7 +28,7 @@ const router = createBrowserRouter([
       },
       {
         index: true,
-        element: <Navigate to='env-setting' replace={true} />
+        element: <Navigate to='account-manager' replace={true} />
       }
     ]
   },

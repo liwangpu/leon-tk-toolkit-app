@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
 import { Button, Col, Form, Row } from 'antd';
-import LanguageSelect from '../../components/LanguageSelect';
-import styles from './index.module.scss';
-import { getAppStore } from '../../stores';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
+import React, { useEffect } from 'react';
+import LanguageSelect from '../../components/LanguageSelect';
 import { useNotify } from '../../hooks';
+import { getAppStore } from '../../stores';
+import styles from './index.module.scss';
 
 const appStore = getAppStore();
 

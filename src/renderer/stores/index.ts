@@ -1,10 +1,10 @@
-import { Instance, types } from 'mobx-state-tree';
-import { AccountModel, TiktokStore, TiktokStoreModel } from './tiktokStore';
-import { EnvStore, EnvStoreModel } from './envStore';
+import {Instance, types} from 'mobx-state-tree';
+import {AccountModel, TiktokStore, TiktokStoreModel} from './tiktokStore';
+import {EnvStore, EnvStoreModel} from './envStore';
 
 const AppStore = types.model({
   envStore: EnvStore,
-  tiktokStore: TiktokStore
+  tiktokStore: TiktokStore,
 });
 
 export type AppStoreModel = Instance<typeof AppStore>;
@@ -15,10 +15,10 @@ export function getAppStore(): AppStoreModel {
   if (!store) {
     store = AppStore.create({
       envStore: {},
-      tiktokStore: {}
+      tiktokStore: {},
     });
   }
   return store;
 }
 
-export type { AccountModel, TiktokStoreModel, EnvStoreModel };
+export type {AccountModel, TiktokStoreModel, EnvStoreModel};

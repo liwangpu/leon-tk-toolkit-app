@@ -6,6 +6,7 @@ import './index.scss';
 import Test from './pages/Test';
 import EnvSetting from './pages/EnvSetting';
 import AccountManager from './pages/AccountManager';
+import DNSCheck from './pages/DNSCheck';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: 'account-manager',
         element: <AccountManager />,
+      },
+      {
+        path: 'dns-check',
+        element: <DNSCheck />,
       },
       {
         path: 'test',

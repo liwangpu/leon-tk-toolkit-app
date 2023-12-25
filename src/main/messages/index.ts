@@ -1,13 +1,13 @@
-import { IMessage } from "../../interfaces";
-import { MessageTopic } from "../../enums";
-import { OpenHtmlFileHandler } from "./openHtmlFileHandler";
-import { TkOpenWindowHandler } from "./tkOpenWindowHandler";
-import { BrowserWindow } from "electron";
-import { TkGotoLoginHandler } from "./tkGotoLoginHandler";
-import { TkCloseWindowHandler } from "./tkCloseWindowHandler";
-import { TkSettingEnvWindowHandler } from "./tkSettingEnvHandler";
-import { TkDomReadyHandler } from "./tkDomReadyHandler";
-import { TkGotoRegisterHandler } from "./tkGotoRegisterHandler";
+import {MessageTopic} from "../../enums";
+import {OpenHtmlFileHandler} from "./openHtmlFileHandler";
+import {TkOpenWindowHandler} from "./tkOpenWindowHandler";
+import {BrowserWindow} from "electron";
+import {TkGotoLoginHandler} from "./tkGotoLoginHandler";
+import {TkCloseWindowHandler} from "./tkCloseWindowHandler";
+import {TkSettingEnvWindowHandler} from "./tkSettingEnvHandler";
+import {TkDomReadyHandler} from "./tkDomReadyHandler";
+import {TkGotoRegisterHandler} from "./tkGotoRegisterHandler";
+import {DNSCheckHandler} from './DNSCheckHandler';
 
 export interface IMessageParam {
   event: any;
@@ -44,6 +44,8 @@ function getActionHandler(topic: MessageTopic): MessageHandlerConstructor | null
       return TkGotoRegisterHandler;
     case MessageTopic.tkDomReady:
       return TkDomReadyHandler;
+    case MessageTopic.DNSCheck:
+      return DNSCheckHandler;
     default:
       return null;
   }

@@ -16,7 +16,7 @@ const appStore = getAppStore();
 
 const AccountManager: React.FC = observer(() => {
 
-  const {tiktokStore} = appStore;
+  const {tiktokStore, envStore} = appStore;
   const [form] = Form.useForm();
   const [editPanelForm] = Form.useForm();
   const [notify, contextHolder] = useNotify();
@@ -24,6 +24,7 @@ const AccountManager: React.FC = observer(() => {
   const [editPanelOpened, setEditPanelOpened] = useState(false);
   const currentId = Form.useWatch("id", editPanelForm);
   const currentAccount = tiktokStore.getAccount(currentId);
+
 
   useEffect(() => {
     tiktokStore.queryAccounts();
@@ -157,7 +158,8 @@ const AccountManager: React.FC = observer(() => {
           <EditPanel form={editPanelForm}/>
           {currentId && currentAccount && (
             <VMOperator
-              canLaunch={!currentAccount.onLine}
+              canLaunch={currentAccount.canLaunch}
+              canShutDown={currentAccount.canShutDown}
               onLaunch={() => tiktokStore.launchAccounts([currentId])}
               onShutDown={() => tiktokStore.shutDownAccounts([currentId])}
               onLogin={handleLogin}

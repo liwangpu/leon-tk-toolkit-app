@@ -1,9 +1,9 @@
-import type { Instance} from 'mobx-state-tree';
-import { flow, getParent, types } from 'mobx-state-tree';
-import type { ITKAccount } from '../../interfaces';
-import { tkAccountRepository } from '../repositories';
-import { translateLanguageCodeToDisplayName } from '../utils';
-import type { AppStoreModel } from './index';
+import type {Instance} from 'mobx-state-tree';
+import {flow, getParent, getRoot, types} from 'mobx-state-tree';
+import type {ITKAccount} from '../../interfaces';
+import {tkAccountRepository} from '../repositories';
+import {translateLanguageCodeToDisplayName} from '../utils';
+import type {AppStoreModel} from './index';
 
 const Account = types.model({
   id: types.string,
@@ -20,6 +20,14 @@ const Account = types.model({
       get languageDisplayName() {
         if (!self.language) return null;
         return translateLanguageCodeToDisplayName(self.language);
+      },
+      get canLaunch() {
+        const {envStore} = getRoot<AppStoreModel>(self);
+        const systemLanguage = envStore.language;
+        return !self.onLine && self.language === systemLanguage;
+      },
+      get canShutDown() {
+        return self.onLine;
       },
     };
   })

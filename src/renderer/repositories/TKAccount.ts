@@ -4,7 +4,7 @@ import type {ITKAccount} from '../../interfaces';
 const db = new Dexie('tk_account');
 
 db.version(1).stores({
-  account: '++id,account,password,language',
+  account: '++id,account,password,language,keywords',
 });
 
 const table = db.table('account');

@@ -1,9 +1,4 @@
-import {
-  IdcardFilled,
-  IdcardOutlined,
-  SettingFilled,
-  SettingOutlined,
-} from '@ant-design/icons';
+import { ExperimentFilled, ExperimentOutlined, IdcardFilled, IdcardOutlined, SettingFilled, SettingOutlined } from '@ant-design/icons';
 import {Outlet} from 'react-router-dom';
 import {AppSidebar, IMenu} from 'leon-rc-toolkit';
 import {useEffect} from 'react';
@@ -40,6 +35,12 @@ const routes: Array<IMenu> = [
     icon: <SettingOutlined/>,
     activedIcon: <SettingFilled/>,
   },
+  // {
+  //   title: '检查DNS',
+  //   url: '/app/dns-check',
+  //   icon: <RadarChartOutlined />,
+  //   // activedIcon: <ExperimentFilled />,
+  // },
   // {
   //   title: '测试',
   //   url: '/app/test',

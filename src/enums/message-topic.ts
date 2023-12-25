@@ -7,4 +7,5 @@ export enum MessageTopic {
   tkGotoRegister = 'tkGotoRegister',
   afterTKCloseWindow = 'afterTKCloseWindow',
   tkDomReady = 'tkDomReady',
+  DNSCheck = 'DNSCheck',
 }

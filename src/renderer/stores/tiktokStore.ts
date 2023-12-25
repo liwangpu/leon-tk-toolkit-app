@@ -1,18 +1,20 @@
-import type { Instance} from 'mobx-state-tree';
-import { flow, getParent, types } from 'mobx-state-tree';
+import type { Instance } from 'mobx-state-tree';
+import { flow, getParent, getRoot, types } from 'mobx-state-tree';
 import type { ITKAccount } from '../../interfaces';
 import { tkAccountRepository } from '../repositories';
 import { translateLanguageCodeToDisplayName } from '../utils';
 import type { AppStoreModel } from './index';
 
-const Account = types.model({
-  id: types.string,
-  account: types.string,
-  password: types.string,
-  language: types.optional(types.string, ''),
-  onLine: types.optional(types.boolean, false),
-})
-  .views(self => {
+const Account = types
+  .model({
+    id: types.string,
+    account: types.string,
+    password: types.string,
+    language: types.optional(types.string, ''),
+    onLine: types.optional(types.boolean, false),
+    keywords: types.optional(types.string, ''),
+  })
+  .views((self) => {
     return {
       get key() {
         return self.id;
@@ -21,9 +23,17 @@ const Account = types.model({
         if (!self.language) return null;
         return translateLanguageCodeToDisplayName(self.language);
       },
+      get canLaunch() {
+        const { envStore } = getRoot<AppStoreModel>(self);
+        const systemLanguage = envStore.language;
+        return !self.onLine && self.language === systemLanguage;
+      },
+      get canShutDown() {
+        return self.onLine;
+      },
     };
   })
-  .actions(self => {
+  .actions((self) => {
     return {
       toggleOnLine: flow(function* (onLine: boolean) {
         self.onLine = onLine;
@@ -33,10 +43,11 @@ const Account = types.model({
 
 export type AccountModel = Instance<typeof Account>;
 
-export const TiktokStore = types.model({
-  accounts: types.map(Account),
-})
-  .views(self => {
+export const TiktokStore = types
+  .model({
+    accounts: types.map(Account),
+  })
+  .views((self) => {
     return {
       getAccount: (id: string) => {
         if (!id) return null;
@@ -44,7 +55,7 @@ export const TiktokStore = types.model({
       },
     };
   })
-  .actions(self => {
+  .actions((self) => {
     return {
       addAccount: flow(function* (ac: ITKAccount) {
         if (!ac) {
@@ -67,7 +78,7 @@ export const TiktokStore = types.model({
       queryAccounts: flow(function* () {
         const accounts = yield tkAccountRepository.query();
         self.accounts.clear();
-        accounts.forEach(ac => {
+        accounts.forEach((ac) => {
           self.accounts.set(ac.id, ac);
         });
       }),
@@ -75,7 +86,7 @@ export const TiktokStore = types.model({
         if (!ids || !ids.length) {
           return;
         }
-        const {envStore} = getParent<AppStoreModel>(self);
+        const { envStore } = getParent<AppStoreModel>(self);
         for (const id of ids) {
           const account = self.accounts.get(id);
           if (!account || envStore.language !== account.language) return;

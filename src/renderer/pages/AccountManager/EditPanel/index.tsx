@@ -1,6 +1,7 @@
 import { Col, Form, Input, Row } from 'antd';
 import type { FormInstance } from 'antd/es/form/hooks/useForm';
 import { observer } from 'mobx-react-lite';
+import { KeyWordTextTags } from '../../../components/KeyWordTags';
 import styles from './index.module.scss';
 import LanguageSelect from '../../../components/LanguageSelect';
 
@@ -60,6 +61,16 @@ const EditPanel: React.FC<IEditorPanelProps> = observer(props => {
                 ]}
               >
                 <LanguageSelect />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={24}>
+            <Col span={24}>
+              <Form.Item
+                label='关键词'
+                name='keywords'
+              >
+                <KeyWordTextTags />
               </Form.Item>
             </Col>
           </Row>

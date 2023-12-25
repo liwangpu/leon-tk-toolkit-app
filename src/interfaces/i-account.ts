@@ -3,4 +3,5 @@ export interface ITKAccount {
   account: string;
   password: string;
   language: string;
+  keywords?: string;
 }

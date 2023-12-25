@@ -1,5 +1,6 @@
-import { flow, getParent, Instance, types } from 'mobx-state-tree';
-import { ITKAccount } from '../../interfaces';
+import type { Instance} from 'mobx-state-tree';
+import { flow, getParent, types } from 'mobx-state-tree';
+import type { ITKAccount } from '../../interfaces';
 import { tkAccountRepository } from '../repositories';
 import { translateLanguageCodeToDisplayName } from '../utils';
 import type { AppStoreModel } from './index';
@@ -9,7 +10,7 @@ const Account = types.model({
   account: types.string,
   password: types.string,
   language: types.optional(types.string, ''),
-  onLine: types.optional(types.boolean, false)
+  onLine: types.optional(types.boolean, false),
 })
   .views(self => {
     return {
@@ -19,28 +20,28 @@ const Account = types.model({
       get languageDisplayName() {
         if (!self.language) return null;
         return translateLanguageCodeToDisplayName(self.language);
-      }
+      },
     };
   })
   .actions(self => {
     return {
       toggleOnLine: flow(function* (onLine: boolean) {
         self.onLine = onLine;
-      })
+      }),
     };
   });
 
 export type AccountModel = Instance<typeof Account>;
 
 export const TiktokStore = types.model({
-  accounts: types.map(Account)
+  accounts: types.map(Account),
 })
   .views(self => {
     return {
       getAccount: (id: string) => {
         if (!id) return null;
         return self.accounts.get(id);
-      }
+      },
     };
   })
   .actions(self => {
@@ -50,7 +51,7 @@ export const TiktokStore = types.model({
           return;
         }
 
-        const account = yield  tkAccountRepository.add(ac);
+        const account = yield tkAccountRepository.add(ac);
         self.accounts.set(account.id, account);
         return account;
       }),
@@ -86,10 +87,10 @@ export const TiktokStore = types.model({
         for (const id of ids) {
           const account = self.accounts.get(id);
           if (account) {
-            yield  account.toggleOnLine(false);
+            yield account.toggleOnLine(false);
           }
         }
-      })
+      }),
     };
   });
 

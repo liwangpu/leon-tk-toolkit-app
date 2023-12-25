@@ -21,7 +21,7 @@ const EnvSetting: React.FC = observer(() => {
       const config = await form.validateFields();
       envStore.setEnv(config);
       notify({
-        message: '保存成功!'
+        message: '保存成功!',
       });
     } catch (errors) {
       console.log(`errors:`, errors);
@@ -45,7 +45,7 @@ const EnvSetting: React.FC = observer(() => {
               label='环境语言'
               name='language'
               rules={[
-                { required: true, message: '语言为必填信息' }
+                { required: true, message: '语言为必填信息' },
               ]}
             >
               <LanguageSelect />

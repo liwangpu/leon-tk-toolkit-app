@@ -1,6 +1,6 @@
 {
   "name": "leon-tk-toolkit-app",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A foundation for scalable desktop apps",
   "main": "./src/main/main.ts",
   "scripts": {
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "antd": "^5.6.1",
+    "dexie": "^3.2.4",
     "axios": "^1.4.0",
     "rc-tween-one": "^3.0.6",
     "@ladjs/country-language": "1.0.3",

@@ -1,6 +1,6 @@
 import { Button } from 'antd';
-import styles from './index.module.scss';
 import { observer } from 'mobx-react-lite';
+import styles from './index.module.scss';
 
 export interface IVMOperatorProps {
   canLaunch?: boolean;

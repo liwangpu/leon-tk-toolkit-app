@@ -1,21 +1,19 @@
 import {
-  ExperimentFilled,
-  ExperimentOutlined,
   IdcardFilled,
   IdcardOutlined,
   SettingFilled,
   SettingOutlined,
 } from '@ant-design/icons';
-import { Outlet } from 'react-router-dom';
-import { AppSidebar, IMenu } from 'leon-rc-toolkit';
+import {Outlet} from 'react-router-dom';
+import {AppSidebar, IMenu} from 'leon-rc-toolkit';
+import {useEffect} from 'react';
+import {addMiddleware} from 'mobx-state-tree';
+import {toJS} from 'mobx';
 import styles from './app.module.scss';
-import { getAppStore } from './stores';
-import { useEffect } from 'react';
-import { addMiddleware } from 'mobx-state-tree';
-import { useMessageCenter } from './hooks';
-import { toJS } from 'mobx';
-import type { IEnvSetting, ITKAccount } from '../interfaces';
-import { MessageTopic } from '../enums';
+import {getAppStore} from './stores';
+import {useMessageCenter} from './hooks';
+import type {IEnvSetting, ITKAccount} from '../interfaces';
+import {MessageTopic} from '../enums';
 
 const appStore = getAppStore();
 appStore.envStore.loadEnv();
@@ -33,14 +31,14 @@ const routes: Array<IMenu> = [
   {
     title: '账号管理',
     url: '/app/account-manager',
-    icon: <IdcardOutlined />,
-    activedIcon: <IdcardFilled />,
+    icon: <IdcardOutlined/>,
+    activedIcon: <IdcardFilled/>,
   },
   {
     title: '环境设置',
     url: '/app/env-setting',
-    icon: <SettingOutlined />,
-    activedIcon: <SettingFilled />,
+    icon: <SettingOutlined/>,
+    activedIcon: <SettingFilled/>,
   },
   // {
   //   title: '测试',
@@ -50,7 +48,7 @@ const routes: Array<IMenu> = [
   // },
 ];
 
-const App = () => {
+function App() {
   const message = useMessageCenter();
   useEffect(() => {
     addMiddleware(appStore.tiktokStore, (call, next) => {
@@ -74,19 +72,20 @@ const App = () => {
       next(call);
     });
 
-    return () => {};
+    return () => {
+    };
   }, []);
 
   return (
     <div className={styles['app']}>
       <div className={styles['app__navigation']}>
-        <AppSidebar menus={routes} />
+        <AppSidebar menus={routes}/>
       </div>
       <div className={styles['app__page']}>
-        <Outlet />
+        <Outlet/>
       </div>
     </div>
   );
-};
+}
 
 export default App;

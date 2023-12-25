@@ -1,12 +1,13 @@
-import { Instance, types } from 'mobx-state-tree';
-import { IEnvSetting } from '../../interfaces';
+import type {Instance} from 'mobx-state-tree';
+import {types} from 'mobx-state-tree';
+import type {IEnvSetting} from '../../interfaces';
 
 const ENV_STORE_KEY = 'env-setting';
 
 const getEnvSetting = () => {
   const envStr = localStorage.getItem(ENV_STORE_KEY);
   const envSetting: IEnvSetting = envStr ? JSON.parse(envStr) : {
-    language: 'zh-hans'
+    language: 'zh-hans',
   };
   return envSetting;
 };
@@ -16,7 +17,7 @@ const saveEnvSetting = (setting: IEnvSetting) => {
 };
 
 export const EnvStore = types.model({
-  language: types.maybeNull(types.string)
+  language: types.maybeNull(types.string),
 })
   .actions(self => {
     return {
@@ -27,7 +28,7 @@ export const EnvStore = types.model({
       loadEnv: () => {
         const setting = getEnvSetting();
         self.language = setting.language;
-      }
+      },
     };
   });
 

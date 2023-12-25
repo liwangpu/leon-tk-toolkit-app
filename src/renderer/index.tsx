@@ -1,13 +1,11 @@
 import { createRoot } from 'react-dom/client';
-import App from './App';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import React from 'react';
+import App from './App';
 import './index.scss';
 import Test from './pages/Test';
 import EnvSetting from './pages/EnvSetting';
 import AccountManager from './pages/AccountManager';
-import { MessageTopic } from '../enums';
-
 
 const router = createBrowserRouter([
   {
@@ -16,41 +14,36 @@ const router = createBrowserRouter([
     children: [
       {
         path: 'env-setting',
-        element: <EnvSetting />
+        element: <EnvSetting />,
       },
       {
         path: 'account-manager',
-        element: <AccountManager />
+        element: <AccountManager />,
       },
       {
         path: 'test',
-        element: <Test />
+        element: <Test />,
       },
       {
         index: true,
-        element: <Navigate to='account-manager' replace={true} />
-      }
-    ]
+        element: <Navigate to='account-manager' replace />,
+      },
+    ],
   },
   {
     index: true,
-    element: <Navigate to='/app' replace={true} />
+    element: <Navigate to='/app' replace />,
   },
   {
     path: '*',
-    element: <Navigate to='/app' replace={true} />
-  }
+    element: <Navigate to='/app' replace />,
+  },
 ]);
 
 
 const container = document.getElementById('root') as HTMLElement;
 const root = createRoot(container);
-// root.render(<App />);
 
 root.render(
   <RouterProvider router={router} />
 );
-
-// calling IPC exposed from preload script
-
-// window.electron.ipcRenderer.sendMessage('ipc-example', ['ping']);

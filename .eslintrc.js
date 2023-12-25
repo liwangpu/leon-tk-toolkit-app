@@ -15,16 +15,7 @@ module.exports = {
     jasmine: true,
   },
   plugins: ['@typescript-eslint'],
-  overrides: [
-    {
-      files: ['*.ts', '*.tsx'],
-      rules: {
-        '@typescript-eslint/no-unused-vars': ['error', { args: 'none' }],
-        'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-        '@typescript-eslint/consistent-type-imports': 'error',
-      },
-    },
-  ],
+  overrides: [],
   settings: {
     react: {
       version: '18.2',
@@ -32,13 +23,15 @@ module.exports = {
     polyfills: ['fetch', 'promises'],
   },
   rules: {
+    '@typescript-eslint/no-explicit-any': 'off',
+    'no-empty-function': 'off',
     'no-shadow': 'off',
     'no-new-func': 'off',
     'no-param-reassign': 'off',
     'no-await-in-loop': 'off',
-    "max-classes-per-file": "off",
-    "no-useless-constructor": "off",
-    '@typescript-eslint/no-unused-vars': [1],
+    'max-classes-per-file': 'off',
+    'no-useless-constructor': 'off',
+    '@typescript-eslint/no-unused-vars': [0],
     'generator-star-spacing': [0],
     'consistent-return': [0],
     'react/forbid-prop-types': [0],
@@ -99,7 +92,7 @@ module.exports = {
     'react/sort-comp': [0],
     'no-trailing-spaces': [2],
     semi: [2],
-    'no-unused-vars': [2],
+    'no-unused-vars': [0],
     'no-unused-expressions': [0],
     'no-multi-spaces': [2],
     'key-spacing': [2],
@@ -117,4 +110,4 @@ module.exports = {
     'no-case-declarations': [0],
     'func-names': [0],
   },
-};
+}

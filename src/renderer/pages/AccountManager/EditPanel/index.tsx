@@ -1,8 +1,8 @@
 import { Col, Form, Input, Row } from 'antd';
-import { FormInstance } from 'antd/es/form/hooks/useForm';
+import type { FormInstance } from 'antd/es/form/hooks/useForm';
+import { observer } from 'mobx-react-lite';
 import styles from './index.module.scss';
 import LanguageSelect from '../../../components/LanguageSelect';
-import { observer } from 'mobx-react-lite';
 
 export interface IEditorPanelProps {
   form: FormInstance;
@@ -16,18 +16,13 @@ const EditPanel: React.FC<IEditorPanelProps> = observer(props => {
     <div className={styles['panel']}>
       <div className={styles['panel__content']}>
         <Form
-          // layout='inline'
           form={form}
-          // labelCol={{ span: 8 }}
-          // wrapperCol={{ span: 16 }}
-          // size='small'
-          // validateTrigger=''
         >
           <Row gutter={24}>
             <Col span={24}>
               <Form.Item
                 name='id'
-                hidden={true}
+                hidden
               >
                 <Input />
               </Form.Item>
@@ -35,7 +30,7 @@ const EditPanel: React.FC<IEditorPanelProps> = observer(props => {
                 label='账号'
                 name='account'
                 rules={[
-                  { required: true, message: '账号为必填信息' }
+                  { required: true, message: '账号为必填信息' },
                 ]}
               >
                 <Input placeholder='请输入账号' />
@@ -48,7 +43,7 @@ const EditPanel: React.FC<IEditorPanelProps> = observer(props => {
                 label='密码'
                 name='password'
                 rules={[
-                  { required: true, message: '密码为必填信息' }
+                  { required: true, message: '密码为必填信息' },
                 ]}
               >
                 <Input placeholder='请输入密码' />
@@ -61,7 +56,7 @@ const EditPanel: React.FC<IEditorPanelProps> = observer(props => {
                 label='语言'
                 name='language'
                 rules={[
-                  { required: true, message: '语言为必填信息' }
+                  { required: true, message: '语言为必填信息' },
                 ]}
               >
                 <LanguageSelect />
@@ -70,9 +65,7 @@ const EditPanel: React.FC<IEditorPanelProps> = observer(props => {
           </Row>
         </Form>
       </div>
-      <div className={styles['panel__footer']}>
-
-      </div>
+      <div className={styles['panel__footer']} />
     </div>
   );
 });

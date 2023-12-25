@@ -1,19 +1,19 @@
 import {
-  getTKPartitionKey,
-  IMessageHandler,
-  IMessageHandlerContext,
-  IMessageParam,
-} from './index';
-import {
   BrowserWindow,
   Menu,
   MenuItemConstructorOptions,
   session,
 } from 'electron';
-import { getExternalPreload, windowManager } from '../commons';
-import { getTiktokScript } from '../externalScripts';
-import { MessageTopic } from '../../enums';
-import log from 'electron-log';
+// import log from 'electron-log';
+import {
+  getTKPartitionKey,
+  IMessageHandler,
+  IMessageHandlerContext,
+  IMessageParam,
+} from './index';
+import {getExternalPreload, windowManager} from '../commons';
+import {getTiktokScript} from '../externalScripts';
+import {MessageTopic} from '../../enums';
 
 const HOME_URL = `https://www.tiktok.com/`;
 
@@ -21,9 +21,12 @@ const HOME_URL = `https://www.tiktok.com/`;
 // const HOME_URL = `http://localhost:8901/app/renderer-test`;
 
 export class TkOpenWindowHandler implements IMessageHandler {
-  constructor(protected context: IMessageHandlerContext) {}
 
-  handle({ event, data }: IMessageParam & { data: { account: string } }): any {
+  // eslint-disable-next-line no-empty-function
+  constructor(protected context: IMessageHandlerContext) {
+  }
+
+  handle({event, data}: IMessageParam & { data: { account: string } }): any {
     const windowKey = getTKPartitionKey(data.account);
 
     if (windowManager.getWindow(windowKey)) {
@@ -31,9 +34,6 @@ export class TkOpenWindowHandler implements IMessageHandler {
     }
 
     const currentSession = session.fromPartition(windowKey);
-    // await currentSession.clearCache();
-    // await currentSession.clearStorageData();
-
     const agent = {
       // userAgent: "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36",
       userAgent:
@@ -51,13 +51,13 @@ export class TkOpenWindowHandler implements IMessageHandler {
     const winSize =
       process.env.NODE_ENV === 'production'
         ? {
-            width: 1024,
-            height: 780,
-          }
+          width: 1024,
+          height: 780,
+        }
         : {
-            width: 1400,
-            height: 780,
-          };
+          width: 1400,
+          height: 780,
+        };
 
     const childWin = new BrowserWindow({
       ...winSize,
@@ -71,7 +71,7 @@ export class TkOpenWindowHandler implements IMessageHandler {
       },
     });
 
-    const { webContents } = childWin;
+    const {webContents} = childWin;
     webContents.debugger.attach(); // You only need to call this once
 
     webContents.debugger.sendCommand('Emulation.setUserAgentOverride', {
@@ -79,13 +79,13 @@ export class TkOpenWindowHandler implements IMessageHandler {
       acceptLanguage: data.language,
     });
 
-    TkOpenWindowHandler.createMenu({ win: childWin, currentSession, data });
+    TkOpenWindowHandler.createMenu({win: childWin, currentSession, data});
 
     windowManager.setWindow(windowKey, childWin);
 
     childWin.loadURL(HOME_URL);
 
-    childWin.on('page-title-updated', function (e) {
+    childWin.on('page-title-updated', e => {
       e.preventDefault();
     });
 
@@ -98,7 +98,7 @@ export class TkOpenWindowHandler implements IMessageHandler {
     childWin.webContents.on('dom-ready', () => {
       const script = getTiktokScript(data);
       childWin.webContents.executeJavaScript(script);
-      log.info(script);
+      // log.info(script);
     });
 
     childWin.once('closed', () => {
@@ -117,8 +117,8 @@ export class TkOpenWindowHandler implements IMessageHandler {
     currentSession: Electron.Session;
     data: any;
   }) {
-    const { win, currentSession, data } = props;
-    const { webContents } = win;
+    const {win, currentSession, data} = props;
+    const {webContents} = win;
 
     const template: Array<MenuItemConstructorOptions> = [
       {

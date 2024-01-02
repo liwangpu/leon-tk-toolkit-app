@@ -1,5 +1,5 @@
-import {Button} from 'antd';
-import {observer} from 'mobx-react-lite';
+import { Button } from 'antd';
+import { observer } from 'mobx-react-lite';
 import styles from './index.module.scss';
 
 export interface IVMOperatorProps {
@@ -9,10 +9,12 @@ export interface IVMOperatorProps {
   onShutDown(): void;
   onLogin(): void;
   onRegister(): void;
+  onAutoView(): void;
 }
 
 const VMOperator: React.FC<IVMOperatorProps> = observer((props) => {
-  const {canLaunch, canShutDown, onLaunch, onShutDown, onLogin, onRegister} = props;
+  const { canLaunch, canShutDown, onLaunch, onShutDown, onLogin, onRegister } =
+    props;
   const canLogin = canShutDown;
   const canRegister = canShutDown;
 
@@ -27,7 +29,15 @@ const VMOperator: React.FC<IVMOperatorProps> = observer((props) => {
       <Button disabled={!canRegister} onClick={onRegister}>
         注册
       </Button>
-      <Button danger type="primary" disabled={!canShutDown} onClick={onShutDown}>
+      <Button disabled={!canRegister} onClick={onRegister}>
+        刷视频
+      </Button>
+      <Button
+        danger
+        type="primary"
+        disabled={!canShutDown}
+        onClick={onShutDown}
+      >
         关闭
       </Button>
     </div>

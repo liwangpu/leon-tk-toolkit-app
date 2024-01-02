@@ -72,7 +72,8 @@ export const TiktokStore = types
         }
 
         const account = yield tkAccountRepository.update(ac);
-        self.accounts.set(account.id, account);
+        const origin = self.accounts.get(account.id);
+        self.accounts.set(account.id, { ...origin, ...account });
         return account;
       }),
       queryAccounts: flow(function* () {

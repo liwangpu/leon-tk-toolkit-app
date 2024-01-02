@@ -11,9 +11,9 @@ import {
   IMessageHandlerContext,
   IMessageParam,
 } from './index';
-import {getExternalPreload, windowManager} from '../commons';
-import {getTiktokScript} from '../externalScripts';
-import {MessageTopic} from '../../enums';
+import { getExternalPreload, windowManager } from '../commons';
+import { getTiktokScript } from '../externalScripts';
+import { MessageTopic } from '../../enums';
 
 const HOME_URL = `https://www.tiktok.com/`;
 
@@ -21,12 +21,10 @@ const HOME_URL = `https://www.tiktok.com/`;
 // const HOME_URL = `http://localhost:8901/app/renderer-test`;
 
 export class TkOpenWindowHandler implements IMessageHandler {
-
   // eslint-disable-next-line no-empty-function
-  constructor(protected context: IMessageHandlerContext) {
-  }
+  constructor(protected context: IMessageHandlerContext) {}
 
-  handle({event, data}: IMessageParam & { data: { account: string } }): any {
+  handle({ event, data }: IMessageParam & { data: { account: string } }): any {
     const windowKey = getTKPartitionKey(data.account);
 
     if (windowManager.getWindow(windowKey)) {
@@ -51,13 +49,13 @@ export class TkOpenWindowHandler implements IMessageHandler {
     const winSize =
       process.env.NODE_ENV === 'production'
         ? {
-          width: 1024,
-          height: 780,
-        }
+            width: 1024,
+            height: 780,
+          }
         : {
-          width: 1400,
-          height: 780,
-        };
+            width: 1400,
+            height: 780,
+          };
 
     const childWin = new BrowserWindow({
       ...winSize,
@@ -71,7 +69,7 @@ export class TkOpenWindowHandler implements IMessageHandler {
       },
     });
 
-    const {webContents} = childWin;
+    const { webContents } = childWin;
     webContents.debugger.attach(); // You only need to call this once
 
     webContents.debugger.sendCommand('Emulation.setUserAgentOverride', {
@@ -79,13 +77,13 @@ export class TkOpenWindowHandler implements IMessageHandler {
       acceptLanguage: data.language,
     });
 
-    TkOpenWindowHandler.createMenu({win: childWin, currentSession, data});
+    TkOpenWindowHandler.createMenu({ win: childWin, currentSession, data });
 
     windowManager.setWindow(windowKey, childWin);
 
     childWin.loadURL(HOME_URL);
 
-    childWin.on('page-title-updated', e => {
+    childWin.on('page-title-updated', (e) => {
       e.preventDefault();
     });
 
@@ -117,10 +115,24 @@ export class TkOpenWindowHandler implements IMessageHandler {
     currentSession: Electron.Session;
     data: any;
   }) {
-    const {win, currentSession, data} = props;
-    const {webContents} = win;
+    const { win, currentSession, data } = props;
+    const { webContents } = win;
 
     const template: Array<MenuItemConstructorOptions> = [
+      {
+        id: 'goBack',
+        label: '返回',
+        click: () => {
+          webContents.goBack();
+        },
+      },
+      {
+        id: 'goForward',
+        label: '前进',
+        click: () => {
+          webContents.goForward();
+        },
+      },
       {
         id: 'audio',
         label: '音频',

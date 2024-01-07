@@ -19,6 +19,7 @@ export default function startup() {
   const MESSAGE_TOPIC_GOTO_LOGIN = 'tkGotoLogin';
   const MESSAGE_TOPIC_GOTO_REGISTER = 'tkGotoRegister';
   const MESSAGE_TOPIC_DOM_READY = 'tkDomReady';
+  const MESSAGE_TOPIC_AUTO_WATCH_VIDEO_BY_KEYWORD = 'tkAutoWatchVideoByKeyword';
 
   //********************************** 消息中心 **********************************//
   const messageCenter = (() => {
@@ -39,7 +40,7 @@ export default function startup() {
   // UIDomManager里面设定所有的方法都是async的
   const UIDomManager = (() => {
     return {
-      selectNode(selectFn, condition, time = 200) {
+      selectNode(selectFn, condition, time = 250) {
         let node;
         const doSelect = () => {
           let dom = selectFn();
@@ -54,9 +55,9 @@ export default function startup() {
         return new Promise((resolve, reject) => {
           let retryTime = 0;
           const it = setInterval(() => {
-            if (retryTime > 15) {
+            if (retryTime > 30) {
               return reject(
-                '已经尝试获取超过15次,认定开发过程中有错误,将不再进行dom扫描,要查询的dom订阅为:',
+                '已经尝试获取超过30次,认定开发过程中有错误,将不再进行dom扫描,要查询的dom订阅为:',
                 selectFn.toString(),
               );
             }
@@ -176,6 +177,146 @@ export default function startup() {
     };
   })();
 
+  /**
+   * 一些公共UI部件管理器
+   * @type {{getAppHeader(): HTMLElement}}
+   */
+  const UIPartManager = (() => {
+    let appHeader;
+    return {
+      /**
+       * 应用头部header
+       * @returns {HTMLElement}
+       */
+      async getAppHeader() {
+        if (!appHeader) {
+          appHeader = await UIDomManager.selectNode(() =>
+            document.getElementById('app-header'),
+          );
+        }
+        return appHeader;
+      },
+      async getSearchInput() {
+        const appHeader = await this.getAppHeader();
+        const searchForm = await UIDomManager.selectNode(() =>
+          appHeader.querySelector('form[action="/search"]'),
+        );
+        const input = await UIDomManager.selectNode(() =>
+          searchForm.querySelector('input'),
+        );
+        const searchButton = await UIDomManager.selectNode(() =>
+          searchForm.querySelector('button'),
+        );
+        return {
+          input,
+          doSearch(keyword) {
+            UIDomManager.setNativeInputValue(input, keyword);
+            searchButton.click();
+          },
+        };
+      },
+      /**
+       * 根据关键词搜索后的视频展示列表
+       */
+      async getSearchItemList() {
+        const generalSearchContainer = await UIDomManager.selectNode(() =>
+          document.getElementById('main-content-general_search'),
+        );
+        return UIDomManager.selectNode(() =>
+          generalSearchContainer.querySelector('div[mode="search-video-list"]'),
+        );
+      },
+      async getVideoPlayDialog() {
+        const generalSearchContainer = await UIDomManager.selectNode(() =>
+          document.getElementById('main-content-general_search'),
+        );
+        // videoDialogContainer children有两个,第一个是视频,第二个是视频相关评论
+        const videoDialogContainer = await UIDomManager.selectNode(() =>
+          generalSearchContainer.querySelector(
+            'div[data-focus-lock-disabled="disabled"]>div[role="dialog"]',
+          ),
+        );
+        // 视频容器wrapper
+        const videoWrapperContainer = videoDialogContainer.children[0];
+        // 视频评论相关容器wrapper
+        //const videoRelationWrapperContainer = videoDialogContainer.children[1];
+        const gotoNextVideoButton = await UIDomManager.selectNode(() =>
+          videoWrapperContainer.querySelector('button[data-e2e="arrow-right"]'),
+        );
+        // 视频容器下有两个核心相关的div,一个是视频(children下标0),另一个是视频进度条(children下标1)
+        const videoContainer = videoWrapperContainer.children[2];
+        const videoTag = await UIDomManager.selectNode(() =>
+          videoContainer.querySelector('video'),
+        );
+        return {
+          autoWatch() {
+            try {
+              let lastVideoDuration = 0;
+              let sameTimeDurationCheckTime = 0;
+              const toNext = () => {
+                const duration =isNaN(videoTag.duration)?0:Math.floor( videoTag.duration);
+                if (isNaN(duration)) {
+                  console.log(`当前获取不到视频时间`);
+                  setTimeout(() => {
+                    toNext();
+                  }, 1000);
+                  return;
+                }
+                let videoTime = duration * 1000;
+                if (
+                  duration === lastVideoDuration &&
+                  sameTimeDurationCheckTime < 3
+                ) {
+                  console.log(`这视频长度和上一个貌似一样,再进入试试`);
+                  sameTimeDurationCheckTime++;
+                  setTimeout(() => {
+                    toNext();
+                  }, 1200);
+                  return;
+                }
+                lastVideoDuration = duration;
+                sameTimeDurationCheckTime = 0;
+                console.log(`视频时长${duration}秒,进入视频监听!`);
+                setTimeout(() => {
+                  console.log(`视频结束,进入下一个!`);
+                  gotoNextVideoButton.click();
+                  toNext();
+                }, videoTime);
+              };
+
+              toNext();
+            } catch (e) {
+
+            }
+          },
+        };
+      },
+    };
+  })();
+
+  /**
+   * 自动刷新视频管理器
+   * @type {{searchVideo(*)}}
+   */
+  const VideoAutomationManager = (() => {
+    return {
+      async autoWatchVideoByKeyword(keywords) {
+        const defaultKeyword = keywords[0];
+        const { doSearch } = await UIPartManager.getSearchInput();
+        doSearch(defaultKeyword);
+        const searchItemList = await UIPartManager.getSearchItemList();
+        const itemContainer = searchItemList.children[0];
+        const videoLink = await UIDomManager.selectNode(() =>
+          itemContainer.querySelector('a[href]'),
+        );
+        videoLink.click();
+        //const searchResultPanel = searchItemList.parentNode.parentNode;
+        const { autoWatch } = await UIPartManager.getVideoPlayDialog();
+        autoWatch();
+      },
+    };
+  })();
+
   const AccountManager = (() => {
     return {
       async login(account) {},
@@ -205,6 +346,11 @@ export default function startup() {
   );
   // 注册
   messageCenter.subscribe(MESSAGE_TOPIC_GOTO_REGISTER, AccountManager.register);
+  // 根据关键词自动刷新视频
+  messageCenter.subscribe(MESSAGE_TOPIC_AUTO_WATCH_VIDEO_BY_KEYWORD, (data) => {
+    const { keywords } = data;
+    VideoAutomationManager.autoWatchVideoByKeyword(keywords);
+  });
 
   // messageCenter.subscribe(MESSAGE_TOPIC_GOTO_LOGIN, async (data) => {
   //   try {

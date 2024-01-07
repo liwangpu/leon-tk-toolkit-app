@@ -1,5 +1,6 @@
 import {MessageTopic} from "../../enums";
 import {OpenHtmlFileHandler} from "./openHtmlFileHandler";
+import { TkAutoWatchVideoByKeywordsHandler } from './tkAutoWatchVideoByKeywordsHandler';
 import {TkOpenWindowHandler} from "./tkOpenWindowHandler";
 import {BrowserWindow} from "electron";
 import {TkGotoLoginHandler} from "./tkGotoLoginHandler";
@@ -42,6 +43,8 @@ function getActionHandler(topic: MessageTopic): MessageHandlerConstructor | null
       return TkGotoLoginHandler;
     case MessageTopic.tkGotoRegister:
       return TkGotoRegisterHandler;
+    case MessageTopic.tkAutoWatchVideoByKeyword:
+      return TkAutoWatchVideoByKeywordsHandler;
     case MessageTopic.tkDomReady:
       return TkDomReadyHandler;
     case MessageTopic.DNSCheck:

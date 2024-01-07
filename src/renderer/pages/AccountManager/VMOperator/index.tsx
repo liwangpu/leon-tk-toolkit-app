@@ -13,7 +13,7 @@ export interface IVMOperatorProps {
 }
 
 const VMOperator: React.FC<IVMOperatorProps> = observer((props) => {
-  const { canLaunch, canShutDown, onLaunch, onShutDown, onLogin, onRegister } =
+  const { canLaunch, canShutDown, onLaunch, onShutDown, onLogin, onRegister,onAutoView } =
     props;
   const canLogin = canShutDown;
   const canRegister = canShutDown;
@@ -29,7 +29,7 @@ const VMOperator: React.FC<IVMOperatorProps> = observer((props) => {
       <Button disabled={!canRegister} onClick={onRegister}>
         注册
       </Button>
-      <Button disabled={!canRegister} onClick={onRegister}>
+      <Button  onClick={onAutoView}>
         刷视频
       </Button>
       <Button

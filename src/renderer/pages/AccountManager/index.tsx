@@ -103,7 +103,19 @@ const AccountManager: React.FC = observer(() => {
     messageCenter.gotoRegister(toJS(currentAccount));
   };
 
-  const handleAutoView = () => {};
+  const handleAutoWatchVideo = () => {
+    if (!currentAccount.keywords) {
+      return notify({
+        message: '当前账号没有设置关键词，无法自动刷视频！',
+        type: 'info',
+      });
+    }
+    const keywords = currentAccount.keywords.toString().split(',');
+    messageCenter.autoWatchVideoByKeyword({
+      account: currentAccount.account,
+      keywords,
+    });
+  };
 
   return (
     <Page
@@ -186,7 +198,7 @@ const AccountManager: React.FC = observer(() => {
               onShutDown={() => tiktokStore.shutDownAccounts([currentId])}
               onLogin={handleLogin}
               onRegister={handleRegister}
-              onAutoView={handleAutoView}
+              onAutoView={handleAutoWatchVideo}
             />
           )}
         </Drawer>

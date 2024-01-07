@@ -1,17 +1,50 @@
 import { notification } from 'antd';
+import { ArgsProps } from 'antd/es/notification/interface';
 
-export function useNotify(): [(params: { message: string, description?: string }) => void, any] {
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
+
+const commonNotifyOption = {
+  duration: 2,
+  placement: 'bottomRight',
+};
+
+const generateNotifyArgs = (props: Partial<ArgsProps>): ArgsProps => {
+  return { ...commonNotifyOption, ...props } as any;
+};
+
+export function useNotify(): [
+  (params: {
+    message: string;
+    description?: string;
+    type?: NotificationType;
+  }) => void,
+  any,
+] {
   const [notify, contextHolder] = notification.useNotification();
 
   return [
-    (params: { message: string, description?: string }) => {
-      notify.success({
-        description: params.description || '温馨提示',
-        message: params.message || '操作成功!',
-        duration: 2,
-        placement: 'bottomRight'
-      });
+    (props: {
+      message: string;
+      description?: string;
+      type?: NotificationType;
+    }) => {
+      const { type, message, description } = props;
+      const args = generateNotifyArgs({message});
+      switch (type) {
+        case 'info':
+          notify.info(args);
+          break;
+        case 'warning':
+          notify.warning(args);
+          break;
+        case 'error':
+          notify.error(args);
+          break;
+        default:
+          notify.success(args);
+          break;
+      }
     },
-    contextHolder
+    contextHolder,
   ];
 }

@@ -5,6 +5,8 @@ export enum MessageTopic {
   tkCloseWindow = 'tkCloseWindow',
   tkGotoLogin = 'tkGotoLogin',
   tkGotoRegister = 'tkGotoRegister',
+  tkSearchVideo = 'tkSearchVideo',
+  tkAutoWatchVideoByKeyword = 'tkAutoWatchVideoByKeyword',
   afterTKCloseWindow = 'afterTKCloseWindow',
   tkDomReady = 'tkDomReady',
   DNSCheck = 'DNSCheck',
